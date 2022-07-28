@@ -1,5 +1,6 @@
 #Problem 1. Permutation in strings
 #Find out if a string has a permutation of 'abc' based on a string
+
 def permutation_in_string(string1,pattern):
     window_start = 0
     matched_characters = 0
@@ -34,7 +35,6 @@ print(permutation_in_string("pattbcaern","abc"))
 #Problem 2. Anagrams in strings
 #Find all anagrams in any given string
 #returns the indicies where they're located
-
 
 def anagram_in_string(string1,pattern):
     windows_start = 0
