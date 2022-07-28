@@ -1,0 +1,72 @@
+#Problem 1. Permutation in strings
+#Find out if a string has a permutation of 'abc' based on a string
+def permutation_in_string(string1,pattern):
+    window_start = 0
+    matched_characters = 0
+    frequency = {}
+    for i in pattern:
+        if i not in frequency:
+            frequency[i] = 0
+        frequency[i] += 1
+    
+    for window_end in range(len(string1)):
+        character = string1[window_end]
+        if character in frequency:
+            matched_characters += 1
+            frequency[character] -= 1
+            if frequency[character] == 0:
+                matched_characters += 1
+        
+        if matched_characters == len(frequency):
+            return True
+        
+        if window_end >= len(pattern) - 1:
+            left_character = string1[window_start]
+            window_start += 1
+            if left_character in frequency:
+                if frequency[left_character] == 0:
+                    matched_characters -= 1
+                frequency[left_character] += 1
+    return False
+
+print(permutation_in_string("pattbcaern","abc"))
+
+#Problem 2. Anagrams in strings
+#Find all anagrams in any given string
+#returns the indicies where they're located
+
+
+def anagram_in_string(string1,pattern):
+    windows_start = 0
+    matched_chars = 0
+    anagram = {}
+    final_indicies = []
+    for i in pattern:
+        if i not in anagram:
+            anagram[i] = 0
+        anagram[i] += 1
+    
+    for window_end in range(len(string1)):
+        right_character = string1[window_end]
+        if right_character in anagram:
+            anagram[right_character] -= 1
+            if anagram[right_character] == 0:
+                matched_chars += 1
+    
+        if matched_chars == len(anagram):
+            final_indicies.append(windows_start)
+    
+        if window_end >= len(pattern) - 1:
+            left_char = string1[windows_start]
+            windows_start += 1
+            if left_char in anagram:
+                if anagram[left_char] == 0:
+                    matched_chars -= 1
+                anagram[left_char] += 1
+    return final_indicies
+print(anagram_in_string("abbcabc","abc"))
+print(anagram_in_string("ppqp", "pq"))
+
+#Problem #3 Smallest Window containing substring
+#Find the smallest substring in the given string which has all the character occurrences of the given pattern.
+
