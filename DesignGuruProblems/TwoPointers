@@ -1,0 +1,6 @@
+# Problem #1 pair_target_sum
+
+def pair_target_sum(array,target):
+    for i in array:
+        if i + array[i] :
+            
