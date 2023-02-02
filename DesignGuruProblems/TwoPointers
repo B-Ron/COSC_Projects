@@ -1,6 +1,19 @@
 # Problem #1 pair_target_sum
 
 def pair_target_sum(array,target):
-    for i in array:
-        if i + array[i] :
-            
+    left_pointer = 0
+    right_pointer = len(array) - 1
+    while(left_pointer < right_pointer):
+        sum = array[left_pointer] + array[right_pointer]
+        if sum == target:
+            return [left_pointer, right_pointer]
+        
+        if sum > target:
+            right_pointer -= 1
+        
+        else:
+            left_pointer += 1
+    return [-1, -1]
+print(pair_target_sum([1, 2, 3, 4, 6],6))
+print(pair_target_sum([5,10,15,20],20))
+                        
