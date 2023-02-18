@@ -17,3 +17,16 @@ def pair_target_sum(array,target):
 print(pair_target_sum([1, 2, 3, 4, 6],6))
 print(pair_target_sum([5,10,15,20],20))
                         
+#Problem #2 Remove_Dupes
+
+def remove_dupes(array):
+    next_non_dupe = 1
+    dupe = 0
+    while (dupe < len(array)):
+        if array[next_non_dupe - 1] != array[dupe]:
+            array[next_non_dupe] = array[dupe]
+            next_non_dupe += 1
+        dupe += 1
+    return next_non_dupe
+print(remove_dupes([4,4,4,8,2,2,5,1,6]))        
+    
