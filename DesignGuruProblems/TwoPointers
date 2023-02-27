@@ -29,4 +29,15 @@ def remove_dupes(array):
         dupe += 1
     return next_non_dupe
 print(remove_dupes([4,4,4,8,2,2,5,1,6]))        
-    
+ 
+#Problem #3 Remove num based on input key
+
+def remove_key_dupe(array,target):
+    next_ele = 0
+    for i in range(len(array)):
+        if array[i] != target:
+            array[next_ele] = array[i]
+            next_ele += 1
+    return next_ele
+print(remove_key_dupe([4,4,4,8,2,2,5,1,6],4))  
+         
