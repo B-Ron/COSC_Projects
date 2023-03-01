@@ -40,4 +40,24 @@ def remove_key_dupe(array,target):
             next_ele += 1
     return next_ele
 print(remove_key_dupe([4,4,4,8,2,2,5,1,6],4))  
-         
+
+#Problem #4 Squaring Sorted array
+
+def square_sort(arr):
+    left_point = 0
+    right_point = len(arr) - 1
+    square_list = [0 for i in range(len(arr)-1)]
+    max_sqre_indx = len(arr) - 1     
+    while left_point <= right_point:
+        left_square = arr[left_point]**2
+        right_square = arr[right_point]**2
+        if left_square > right_square:
+            square_list[max_sqre_indx] = left_square
+            left_point += 1
+        else:
+            square_list[max_sqre_indx] = right_square
+            right_point -= 1
+        max_sqre_indx -= 1
+    return square_list
+print("Squares: " + str(square_sort([-2, -1, 0, 2, 3])))
+print("Squares: " + str(square_sort([-3, -1, 0, 1, 2])))
