@@ -4,7 +4,7 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login")
 def login():
-    return "<p>Login</p>" #create HTML Paragraph for login spot
+    return render_template("login.html", text = "Testing", user = "B") #create HTML Paragraph for login spot
 
 @auth.route("/logout")
 def logout():
@@ -12,4 +12,4 @@ def logout():
 
 @auth.route("/sign-up")
 def sign_up():
-    return "<p>Sign Up</p>" #Create HTML Paragraph for Sign Up Spot
+    return render_template("sign_up.html") #Create HTML Paragraph for Sign Up Spot
