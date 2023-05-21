@@ -7,7 +7,20 @@ auth = Blueprint("auth", __name__)
 
 @auth.route("/login", methods = ["GET", "POST"])
 def login():
-    
+    if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        
+        user = User.query.filter_by(email = email).first()
+        if user:
+            #check if password matches hash
+            if check_password_hash(user.password,password):
+                flash("Successfully Logged In. ",category= "success")
+            else:
+                flash("Incorrect Password", category = "error")
+        else:
+            flash("Email does not exist", category = "error")
+        
     return render_template("login.html", boolean  = True) #create HTML Paragraph for login spot
 
 @auth.route("/logout")
