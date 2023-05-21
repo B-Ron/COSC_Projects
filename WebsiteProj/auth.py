@@ -11,11 +11,12 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
         
-        user = User.query.filter_by(email = email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             #check if password matches hash
-            if check_password_hash(user.password,password):
-                flash("Successfully Logged In. ",category= "success")
+            if check_password_hash(user.password, password):
+                flash("Successfully Logged In. ", category = "success")
+                return  redirect(url_for("views.home"))
             else:
                 flash("Incorrect Password", category = "error")
         else:
@@ -34,7 +35,12 @@ def sign_up():
         first_name = request.form.get("firstName")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
-        if len(email) < 4:
+        
+        user = User.query.filter_by(email = email).first()
+        
+        if user:
+            flash("Email already exists", category = "error")
+        elif len(email) < 4:
             flash("Email must be longer than 3 characters", category = "error")
         elif len(first_name) < 2:
             flash("First Name must be longer than 2 characters", category = "error")
