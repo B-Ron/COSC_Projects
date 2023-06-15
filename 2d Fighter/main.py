@@ -9,6 +9,10 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("Brawler")
 
+#load background image
+bg_image = pygame.image.load("assets/images/background/backgound.jpg").convert_alpha()
+
+
 #game loop
 run = True
 while run:
