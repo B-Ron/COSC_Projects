@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 
 pygame.init()
 
@@ -10,8 +10,7 @@ screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("Brawler")
 
 #load background image
-bg_image = pygame.image.load("assets/images/background/background.jpg").convert_alpha()
-
+bg_image = pygame.image.load(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFighter\assets\images\background\background.jpg").convert()
 
 #game loop
 run = True
