@@ -10,6 +10,10 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 pygame.display.set_caption("Brawler")
 
+#set framerate
+clock = pygame.time.Clock()
+FPS = 60
+
 #load background image
 bg_image = pygame.image.load(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFighter\assets\images\background\background.jpg").convert()
 
@@ -26,9 +30,14 @@ fighter2 = Fighter(700,310)
 #game loop
 run = True
 while run:
+    clock.tick(FPS)
     
     #draw background
     draw_bg()
+    
+    #move fighters
+    fighter1.move()
+    fighter2.move()
     
     #draw fighters
     fighter1.draw(screen)
