@@ -21,10 +21,14 @@ WHITE = (255,255,255)
 
 #define fighter varibales
 WARRIOR_SIZE = 162
-WARRIOR_DATA = [WARRIOR_SIZE]
+WARRIOR_SCALE = 4
+WARRIOR_OFFSET = [72,56]
+WARRIOR_DATA = [WARRIOR_SIZE,WARRIOR_SCALE,WARRIOR_OFFSET]
 
 WIZARD_SIZE = 250
-WIZARD_DATA  = [WIZARD_SIZE]
+WIZARD_SCALE = 3
+WIZARD_OFFSET = [112,107]
+WIZARD_DATA  = [WIZARD_SIZE,WIZARD_SCALE,WIZARD_OFFSET]
 #load background image
 bg_image = pygame.image.load(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFighter\assets\images\background\background.jpg").convert()
 
@@ -50,8 +54,8 @@ def draw_health_bar(health,x, y):
 
 #create two instances for fighters
 
-fighter1 = Fighter(200, 310, WARRIOR_DATA, warrior_sprite, WARRIOR_ANIMATION_FRAMES)
-fighter2 = Fighter(700, 310, WIZARD_DATA, wizard_sprite, WIZARD_ANIMATION_FRAMES)
+fighter1 = Fighter(200, 310, False, WARRIOR_DATA, warrior_sprite, WARRIOR_ANIMATION_FRAMES)
+fighter2 = Fighter(700, 310, True, WIZARD_DATA, wizard_sprite, WIZARD_ANIMATION_FRAMES)
 
 #game loop
 run = True
