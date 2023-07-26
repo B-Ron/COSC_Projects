@@ -1,11 +1,16 @@
 import pygame
 
 class Fighter():
-    def __init__(self, x, y, data, sprite_sheet, sprite_frames):
+    def __init__(self, x, y, flip, data,sprite_sheet, sprite_frames):
         self.size = data[0]
-        self.flip = False
+        self.image_scale = data[1]
+        self.offset = data[2]
+        self.flip = flip
         self.sprite_list = self.load_sprites(sprite_sheet,sprite_frames)
         self.action = 0 # 0: idle|| 1: run || 2: jump || 3: atk1 || 4: atk2 || 5: hit || 6: death
+        self.frame_index = 0
+        self.image = self.sprite_list[self.action][self.frame_index]
+        self.update_time = pygame.time.get_ticks()
         self.rect = pygame.Rect((x,y,80,180))
         self.vel_y =  0
         self.jump = False
@@ -18,10 +23,10 @@ class Fighter():
         sprite_list = []
         for y, sprite in enumerate(sprite_frames):
             temp_img_lst = []
-            for i in range(sprite):
-                temp_img = sprite_sheet.subsurface(i * self.size, y * self.size, self.size, self.size)
-                temp_img_lst.append(temp_img)  
-            sprite_list.append(temp_img_lst)  
+            for x in range(sprite):
+                temp_img = sprite_sheet.subsurface(x * self.size, y * self.size, self.size, self.size)
+                temp_img_lst.append(pygame.transform.scale(temp_img, (self.size * self.image_scale, self.size * self.image_scale)))
+                sprite_list.append(temp_img_lst)  
         return sprite_list  
                  
     def move(self, screen_width, screen_height, surface, target):
@@ -83,6 +88,9 @@ class Fighter():
         self.rect.x += dx
         self.rect.y += dy
         
+    #animation updates
+    def update(self)
+        
     def attack(self,surface,target):
         self.attacking = True
         hitbox = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
@@ -93,4 +101,6 @@ class Fighter():
         
     
     def draw(self,surface):
+        img = pygame.transform.flip(self.image, self.flip, False)
         pygame.draw.rect(surface, (255,0,0), self.rect)
+        surface.blit(img, (self.rect.x - (self.offset[0] * self.image_scale), self.rect.y - (self.offset[1] * self.image_scale)))
