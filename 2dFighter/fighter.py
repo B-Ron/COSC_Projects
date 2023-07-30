@@ -1,7 +1,7 @@
 import pygame
 
 class Fighter():
-    def __init__(self, x, y, flip, data,sprite_sheet, sprite_frames):
+    def __init__(self, x, y, flip, data, sprite_sheet, sprite_frames):
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -13,9 +13,12 @@ class Fighter():
         self.update_time = pygame.time.get_ticks()
         self.rect = pygame.Rect((x,y,80,180))
         self.vel_y =  0
+        self.running = False
         self.jump = False
         self.attacking = False
         self.attack_type = 0
+        self.attack_cooldown = 0
+        self.hit = False
         self.health = 100
     
     def load_sprites(self,sprite_sheet,sprite_frames):
@@ -34,6 +37,8 @@ class Fighter():
         GRAVITY = 2
         dx = 0
         dy = 0
+        self.running = False
+        self.attack_type = 0
         
         #key presses
         key = pygame.key.get_pressed()
@@ -44,9 +49,11 @@ class Fighter():
              #movement
             if key[pygame.K_a]:
                 dx  = -SPEED
+                self.running = True
         
             if key[pygame.K_d]:
                 dx = SPEED
+                self.running = True
         
             #jumping
             if key[pygame.K_w]and self.jump == False:
@@ -65,7 +72,6 @@ class Fighter():
         
         #apply gravity
         self.vel_y += GRAVITY
-            
         dy += self.vel_y   
         
         #map endpoints
@@ -83,22 +89,66 @@ class Fighter():
             self.flip = False
         else:
             self.flip = True
+        
+        #attack cooldown
+        if self.attack_cooldown > 0:
+            self.attack_cooldown -= 1
             
         #update player position
         self.rect.x += dx
         self.rect.y += dy
         
     #animation updates
-    def update(self)
+    def update(self):
+        #check action player performs
+        if self.hit == True:
+            self.update_action(5) #hit
+        
+        elif self.attacking == True:
+            if self.attack_type == 1:
+                self.update_action(3) #atk1
+            elif self.attack_type == 2:
+                self.update_action(4) #at2
+        
+        elif self.jump == True:
+            self.update_action(2) # jump
+        
+        elif self.running == True:
+            self.update_action(1) #run
+        else:
+            self.update_action(0) #idle
+        
+        cooldown = 50
+        #update image
+        self.image = self.sprite_list[self.action][self.frame_index]
+        #check if time has passed since update
+        if pygame.time.get_ticks() - self.update_time > cooldown:
+            self.frame_index += 1
+            self.update_time = pygame.time.get_ticks()
+        #check if animation is finished
+        if self.frame_index >= len(self.sprite_list[self.action]):
+            self.frame_index = 0
+            #check if attack is exe
+            if self.action == 3 or self.action == 4:
+                self.attacking = False
+                self.attack_cooldown = 20
         
     def attack(self,surface,target):
-        self.attacking = True
-        hitbox = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
-        if hitbox.colliderect(target.rect):
-            target.health -= 10
+        if self.attack_cooldown == 0:
+            self.attacking = True
+            hitbox = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
+            if hitbox.colliderect(target.rect):
+                target.health -= 10
         
-        pygame.draw.rect(surface, (0,255,0), hitbox)
+            pygame.draw.rect(surface, (0,255,0), hitbox)
         
+    def update_action(self, new_action):
+        #check if new action is different than previous
+        if new_action != self.action:
+            self.action = new_action
+            #update animation
+            self.frame_index = 0
+            self.update_time = pygame.time.get_ticks()
     
     def draw(self,surface):
         img = pygame.transform.flip(self.image, self.flip, False)
