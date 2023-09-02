@@ -20,6 +20,7 @@ class Fighter():
         self.attack_cooldown = 0
         self.hit = False
         self.health = 100
+        self.alive = True
     
     def load_sprites(self,sprite_sheet,sprite_frames):
         #extract images from spritesheet
@@ -56,7 +57,7 @@ class Fighter():
                 self.running = True
         
             #jumping
-            if key[pygame.K_w]and self.jump == False:
+            if key[pygame.K_w] and self.jump == False:
                 self.vel_y = -30
                 self.jump = True
             #attack buttons
@@ -101,15 +102,20 @@ class Fighter():
     #animation updates
     def update(self):
         #check action player performs
-        if self.hit == True:
+        if self.health <= 0:
+            self.health = 0
+            self.alive = False
+            self.update_action(6) # death
+        
+        elif self.hit == True:
             self.update_action(5) #hit
         
         elif self.attacking == True:
             if self.attack_type == 1:
                 self.update_action(3) #atk1
             elif self.attack_type == 2:
-                self.update_action(4) #at2
-        
+                self.update_action(4) #atk2
+                
         elif self.jump == True:
             self.update_action(2) # jump
         
@@ -132,6 +138,12 @@ class Fighter():
             if self.action == 3 or self.action == 4:
                 self.attacking = False
                 self.attack_cooldown = 20
+            #check if dmg was tanken
+            if self.action == 5: #hit
+                self.hit == False
+                #if player was in middle of atk, stop atk
+                self.attacking = False
+                self.attack_cooldown = 20
         
     def attack(self,surface,target):
         if self.attack_cooldown == 0:
@@ -139,6 +151,7 @@ class Fighter():
             hitbox = pygame.Rect(self.rect.centerx - (2 * self.rect.width * self.flip), self.rect.y, 2 * self.rect.width, self.rect.height)
             if hitbox.colliderect(target.rect):
                 target.health -= 10
+                target.hit = True
         
             pygame.draw.rect(surface, (0,255,0), hitbox)
         
