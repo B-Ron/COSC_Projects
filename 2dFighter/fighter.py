@@ -133,17 +133,21 @@ class Fighter():
             self.update_time = pygame.time.get_ticks()
         #check if animation is finished
         if self.frame_index >= len(self.sprite_list[self.action]):
-            self.frame_index = 0
-            #check if attack is exe
-            if self.action == 3 or self.action == 4:
-                self.attacking = False
-                self.attack_cooldown = 20
-            #check if dmg was tanken
-            if self.action == 5: #hit
-                self.hit == False
-                #if player was in middle of atk, stop atk
-                self.attacking = False
-                self.attack_cooldown = 20
+            #if player is dead, end animarion
+            if self.alive == False:
+                self.frame_index = len(self.sprite_list[self.action]) - 1
+            else:
+                self.frame_index = 0
+                #check if attack is exe
+                if self.action == 3 or self.action == 4:
+                    self.attacking = False
+                    self.attack_cooldown = 20
+                #check if dmg was tanken
+                if self.action == 5: #hit
+                    self.hit == False
+                    #if player was in middle of atk, stop atk
+                    self.attacking = False
+                    self.attack_cooldown = 20
         
     def attack(self,surface,target):
         if self.attack_cooldown == 0:
