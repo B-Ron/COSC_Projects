@@ -1,19 +1,19 @@
 import pygame
 
 class Fighter():
-    def __init__(self, player, x, y, flip, data, sprite_sheet, sprite_frames,sound):
-        self.player= player
+    def __init__(self, player, x, y, flip, data, sprite_sheet, sprite_frames, sound):
+        self.player = player
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
         self.flip = flip
-        self.sprite_list = self.load_sprites(sprite_sheet,sprite_frames)
+        self.sprite_list = self.load_sprites(sprite_sheet, sprite_frames)
         self.action = 0 # 0: idle|| 1: run || 2: jump || 3: atk1 || 4: atk2 || 5: hit || 6: death
         self.frame_index = 0
         self.image = self.sprite_list[self.action][self.frame_index]
         self.update_time = pygame.time.get_ticks()
-        self.rect = pygame.Rect((x,y,80,180))
-        self.vel_y =  0
+        self.rect = pygame.Rect((x, y, 80, 180))
+        self.vel_y = 0
         self.running = False
         self.jump = False
         self.attacking = False
@@ -24,7 +24,7 @@ class Fighter():
         self.health = 100
         self.alive = True
     
-    def load_sprites(self,sprite_sheet,sprite_frames):
+    def load_sprites(self, sprite_sheet, sprite_frames):
         #extract images from spritesheet
         sprite_list = []
         for y, sprite in enumerate(sprite_frames):
@@ -32,7 +32,7 @@ class Fighter():
             for x in range(sprite):
                 temp_img = sprite_sheet.subsurface(x * self.size, y * self.size, self.size, self.size)
                 temp_img_lst.append(pygame.transform.scale(temp_img, (self.size * self.image_scale, self.size * self.image_scale)))
-                sprite_list.append(temp_img_lst)  
+            sprite_list.append(temp_img_lst)  
         return sprite_list  
                  
     def move(self, screen_width, screen_height, surface, target, round_over):
@@ -50,7 +50,7 @@ class Fighter():
         #can only perfom actions if not attacking
         if self.attacking == False and self.alive == True and round_over == False:
             #check p1 controls
-            if self.player == 1 :
+            if self.player == 1:
              #movement
                 if key[pygame.K_a]:
                     dx  = -SPEED
@@ -69,7 +69,7 @@ class Fighter():
                     self.attack(target)
                     #primary attack
                     if key[pygame.K_t]:
-                        self.attack_type == 1
+                        self.attack_type = 1
                 
                     #secondary attack
                     if key[pygame.K_y]:
@@ -96,7 +96,7 @@ class Fighter():
                     self.attack(target)
                     #primary attack
                     if key[pygame.K_KP1]:
-                        self.attack_type == 1
+                        self.attack_type = 1
                 
                     #secondary attack
                     if key[pygame.K_KP2]:
@@ -110,7 +110,7 @@ class Fighter():
         
         #map endpoints
         if self.rect.left + dx < 0:
-            dx =  -self.rect.left
+            dx = -self.rect.left
         if self.rect.right + dx > screen_width:
             dx = screen_width - self.rect.right
         if self.rect.bottom + dy > screen_height - 110:
@@ -177,12 +177,12 @@ class Fighter():
                     self.attack_cooldown = 20
                 #check if dmg was tanken
                 if self.action == 5: #hit
-                    self.hit == False
+                    self.hit = False
                     #if player was in middle of atk, stop atk
                     self.attacking = False
                     self.attack_cooldown = 20
         
-    def attack(self,target):
+    def attack(self, target):
         if self.attack_cooldown == 0:
             #exe atk
             self.attacking = True
@@ -200,6 +200,6 @@ class Fighter():
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
     
-    def draw(self,surface):
+    def draw(self, surface):
         img = pygame.transform.flip(self.image, self.flip, False)
         surface.blit(img, (self.rect.x - (self.offset[0] * self.image_scale), self.rect.y - (self.offset[1] * self.image_scale)))
