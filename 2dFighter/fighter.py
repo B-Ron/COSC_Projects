@@ -1,7 +1,8 @@
 import pygame
 
 class Fighter():
-    def __init__(self, x, y, flip, data, sprite_sheet, sprite_frames):
+    def __init__(self, player, x, y, flip, data, sprite_sheet, sprite_frames):
+        self.player= player
         self.size = data[0]
         self.image_scale = data[1]
         self.offset = data[2]
@@ -46,30 +47,61 @@ class Fighter():
         
         
         #can only perfom actions if not attacking
-        if self.attacking == False:
+        if self.attacking == False and self.alive == True:
+            #check p1 controls
+            if self.player == 1 :
              #movement
-            if key[pygame.K_a]:
-                dx  = -SPEED
-                self.running = True
-        
-            if key[pygame.K_d]:
-                dx = SPEED
-                self.running = True
-        
-            #jumping
-            if key[pygame.K_w] and self.jump == False:
-                self.vel_y = -30
-                self.jump = True
-            #attack buttons
-            if key[pygame.K_t] or key[pygame.K_y]:
-                self.attack(surface,target)
-                #primary attack
-                if key[pygame.K_t]:
-                    self.attack_type == 1
+                if key[pygame.K_a]:
+                    dx  = -SPEED
+                    self.running = True
             
-                #secondary attack
-                if key[pygame.K_y]:
-                    self.attack_type = 2
+                if key[pygame.K_d]:
+                    dx = SPEED
+                    self.running = True
+            
+                #jumping
+                if key[pygame.K_w] and self.jump == False:
+                    self.vel_y = -30
+                    self.jump = True
+                #attack buttons
+                if key[pygame.K_t] or key[pygame.K_y]:
+                    self.attack(surface,target)
+                    #primary attack
+                    if key[pygame.K_t]:
+                        self.attack_type == 1
+                
+                    #secondary attack
+                    if key[pygame.K_y]:
+                        self.attack_type = 2
+            
+            #check p2 controls
+            if self.player == 2: 
+             #movement
+                if key[pygame.K_LEFT]:
+                    dx  = -SPEED
+                    self.running = True
+            
+                if key[pygame.K_RIGHT]:
+                    dx = SPEED
+                    self.running = True
+            
+                #jumping
+                if key[pygame.K_UP] and self.jump == False:
+                    self.vel_y = -30
+                    self.jump = True
+                
+                #attack buttons
+                if key[pygame.K_KP1] or key[pygame.K_KP2]:
+                    self.attack(surface,target)
+                    #primary attack
+                    if key[pygame.K_KP1]:
+                        self.attack_type == 1
+                
+                    #secondary attack
+                    if key[pygame.K_KP2]:
+                        self.attack_type = 2
+                        
+        
         
         #apply gravity
         self.vel_y += GRAVITY

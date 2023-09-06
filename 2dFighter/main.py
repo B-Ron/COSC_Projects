@@ -19,6 +19,13 @@ YELLOW = (255,255,0)
 RED = (255,0,0)
 WHITE = (255,255,255) 
 
+#define game varibles
+intro_count =3 
+last_count_update = pygame.time.get_ticks()
+score = [0,0] #player scores: [p1,p2]
+round_over = False
+round_over_cooldown = 2000
+
 #define fighter varibales
 WARRIOR_SIZE = 162
 WARRIOR_SCALE = 4
@@ -40,6 +47,14 @@ warrior_sprite = pygame.image.load(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFigh
 WARRIOR_ANIMATION_FRAMES = [10,8,1,7,7,3,7]
 WIZARD_ANIMATION_FRAMES = [8,8,1,8,8,3,7]
 
+#define font
+count_font = pygame.font.Font(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFighter\assets\fonts\turok.ttf", 80)
+score_font = pygame.font.Font(r"C:\Users\ronwi\.vscode\COSC_Projects\2dFighter\assets\fonts\turok.ttf", 30)
+
+#function for text
+def draw_text(text,font,text_col,x,y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x,y))
 #function for drawing background
 def draw_bg():
     scaled_bg = pygame.transform.scale(bg_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -54,8 +69,8 @@ def draw_health_bar(health,x, y):
 
 #create two instances for fighters
 
-fighter1 = Fighter(200, 310, False, WARRIOR_DATA, warrior_sprite, WARRIOR_ANIMATION_FRAMES)
-fighter2 = Fighter(700, 310, True, WIZARD_DATA, wizard_sprite, WIZARD_ANIMATION_FRAMES)
+fighter1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sprite, WARRIOR_ANIMATION_FRAMES)
+fighter2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sprite, WIZARD_ANIMATION_FRAMES)
 
 #game loop
 run = True
@@ -69,9 +84,20 @@ while run:
     draw_health_bar(fighter1.health, 20,20)
     draw_health_bar(fighter2.health, 580,20)
     
-    #move fighters
-    fighter1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter2)
-    #fighter2.move()
+    #update countdown
+    if intro_count <=0:
+        #move fighters
+        fighter1.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter2)
+        #fighter2.move(SCREEN_WIDTH, SCREEN_HEIGHT, screen, fighter1)
+    
+    else:
+        #display count timer
+        draw_text(str(intro_count), count_font,RED,SCREEN_WIDTH /2, SCREEN_HEIGHT/ 3 )
+        #update count timer
+        if (pygame.time.get_ticks() - last_count_update) >= 1000:
+            intro_count -= 1
+            last_count_update = pygame.time.get_ticks()
+        
     
     #update fighters
     fighter1.update()
@@ -80,6 +106,18 @@ while run:
     #draw fighters
     fighter1.draw(screen)
     fighter2.draw(screen)
+    
+    #check for player defeat
+    if round_over == False:
+        if fighter1.alive == False:
+            score[1] += 1
+            round_over = True
+            round__over_time = pygame.time.get_ticks()
+    
+        elif fighter2.alive == False:
+            score[0] += 1
+            round_over = True
+            round__over_time = pygame.time.get_ticks()
     
     #event handler
     for event in pygame.event.get():
